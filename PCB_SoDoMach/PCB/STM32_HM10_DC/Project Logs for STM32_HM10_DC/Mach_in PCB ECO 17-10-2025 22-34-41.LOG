@@ -1,0 +1,21 @@
+Change Component Comment : Designator=J? Old Comment=JST-2.54-4P New Comment=LCD16x2 I2C
+Added Component: Designator=J?(BORNE-5.00-2P)
+Add component (AddParameter): Name = "JLCPCB PN"; Value = "C91153"; VariantName = "[No Variations]"
+Added Component: Designator=S?(PUSH_BUTTON_6X6)
+Add component (AddParameter): Name = "JLCPCB PN"; Value = "C255811"; VariantName = "[No Variations]"
+Added Component: Designator=S?(PUSH_BUTTON_6X6)
+Add component (AddParameter): Name = "JLCPCB PN"; Value = "C255811"; VariantName = "[No Variations]"
+Added Component: Designator=S?(PUSH_BUTTON_6X6)
+Add component (AddParameter): Name = "JLCPCB PN"; Value = "C255811"; VariantName = "[No Variations]"
+Added Component: Designator=S?(PUSH_BUTTON_6X6)
+Add component (AddParameter): Name = "JLCPCB PN"; Value = "C255811"; VariantName = "[No Variations]"
+Added Component: Designator=S?(PUSH_BUTTON_6X6)
+Add component (AddParameter): Name = "JLCPCB PN"; Value = "C255811"; VariantName = "[No Variations]"
+Added Member To Class: ClassName=Nguyen_Ly Member=Component J? JACK_P4
+Added Member To Class: ClassName=Nguyen_Ly Member=Component J? BORNE-5.00-2P
+Added Member To Class: ClassName=Nguyen_Ly Member=Component J? LCD16x2 I2C
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S? PUSH_BUTTON_6X6
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S? PUSH_BUTTON_6X6
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S? PUSH_BUTTON_6X6
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S? PUSH_BUTTON_6X6
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S? PUSH_BUTTON_6X6

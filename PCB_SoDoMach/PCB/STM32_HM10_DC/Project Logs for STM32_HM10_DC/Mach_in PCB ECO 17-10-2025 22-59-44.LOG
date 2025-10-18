@@ -1,0 +1,12 @@
+Added Component: Designator=C?(10uF/63V)
+Added Component: Designator=C?(0.22uF/50V)
+Added Component: Designator=D?(LED_5mm_RED)
+Added Component: Designator=IC?(QTO-220)
+Add component (AddParameter): Name = "Value"; Value = "LM7805"; VariantName = "[No Variations]"
+Added Component: Designator=R?(RESISTOR_PTH_9.5mm)
+Added Member To Class: ClassName=Nguyen_Ly Member=Component C? 10uF/63V
+Added Member To Class: ClassName=Nguyen_Ly Member=Component C? 0.
+Added Member To Class: ClassName=Nguyen_Ly Member=Component D? LED_5mm_RED
+Added Member To Class: ClassName=Nguyen_Ly Member=Component IC? LM7805
+Added Member To Class: ClassName=Nguyen_Ly Member=Component R? RESISTOR_9.5mm
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S3 PUSH_BUTTON_6X6

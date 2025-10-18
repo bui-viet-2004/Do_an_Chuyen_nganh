@@ -1,0 +1,27 @@
+Change Component Footprint: Designator=C1 Old Footprint=CN1 New Footprint=CAPACITOR 0603
+Change Component Footprint: Designator=C2 Old Footprint=CN1 New Footprint=CAPACITOR 0603
+Change Component Footprint: Designator=C3 Old Footprint=CN1 New Footprint=CAPACITOR 0603
+Change Component Footprint: Designator=C4 Old Footprint=CN1 New Footprint=CAPACITOR 0603
+Change Component Comment : Designator=C1 Old Comment=100nF New Comment=CAPACITOR 0603
+Change Component Comment : Designator=C2 Old Comment=100nF New Comment=CAPACITOR 0603
+Change Component Comment : Designator=C3 Old Comment=100nF New Comment=CAPACITOR 0603
+Change Component Comment : Designator=C4 Old Comment=100nF New Comment=CAPACITOR 0603
+Change Component Designator: OldDesignator=J? NewDesignator=J1
+Change Component Designator: OldDesignator=J? NewDesignator=J2
+Change Component Designator: OldDesignator=J? NewDesignator=J3
+Change Component Designator: OldDesignator=S? NewDesignator=S1
+Change Component Designator: OldDesignator=S? NewDesignator=S2
+Change Component Designator: OldDesignator=S? NewDesignator=S3
+Change Component Designator: OldDesignator=S? NewDesignator=S4
+Change Component Designator: OldDesignator=S? NewDesignator=S5
+Change Component Designator: OldDesignator=U? NewDesignator=U2
+Change component parameters: Designator = "C1" ("C1"); Footprint = "CN1"; UniqueID = "\QLNQKWIY" ("\QLNQKWIY")
+Change component parameters: Designator = "C2" ("C2"); Footprint = "CN1"; UniqueID = "\OGXQWYDJ" ("\OGXQWYDJ")
+Change component parameters: Designator = "C3" ("C3"); Footprint = "CN1"; UniqueID = "\ISYAUNGE" ("\ISYAUNGE")
+Change component parameters: Designator = "C4" ("C4"); Footprint = "CN1"; UniqueID = "\ULTABDMX" ("\ULTABDMX")
+Added Member To Class: ClassName=Nguyen_Ly Member=Component J1 LCD16x2 I2C
+Added Member To Class: ClassName=Nguyen_Ly Member=Component J3 JACK_P4
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S1 PUSH_BUTTON_6X6
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S2 PUSH_BUTTON_6X6
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S4 PUSH_BUTTON_6X6
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S5 PUSH_BUTTON_6X6

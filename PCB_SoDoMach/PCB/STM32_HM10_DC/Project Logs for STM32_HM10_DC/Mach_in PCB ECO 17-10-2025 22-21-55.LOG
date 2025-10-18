@@ -1,0 +1,9 @@
+Added Component: Designator=J?(JST-2.54-4P)
+Added Component: Designator=J?(JACK_P4)
+Added Component: Designator=J?(JST-2.00-4P)
+Add component (AddParameter): Name = "JLCPCB PN"; Value = "C5175232"; VariantName = "[No Variations]"
+Added Component: Designator=U?(HC-05)
+Added Member To Class: ClassName=Nguyen_Ly Member=Component J? JST-2.54-4P
+Added Member To Class: ClassName=Nguyen_Ly Member=Component J? JACK_P4
+Added Member To Class: ClassName=Nguyen_Ly Member=Component J? JST-2.00-4P
+Added Member To Class: ClassName=Nguyen_Ly Member=Component U? HM-10

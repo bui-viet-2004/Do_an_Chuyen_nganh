@@ -1,0 +1,9 @@
+Added Component: Designator=S?(PUSH_BUTTON_SMD_6x6)
+Add component (AddParameter): Name = "JLCPCB PN"; Value = "C231324"; VariantName = "[No Variations]"
+Added Component: Designator=S?(PUSH_BUTTON_SMD_3X4X2)
+Add component (AddParameter): Name = "JLCPCB PN"; Value = "C231644"; VariantName = "[No Variations]"
+Added Component: Designator=S?(PUSH_BUTTON_SMD_5.2x5.2)
+Add component (AddParameter): Name = "JLCPCB PN"; Value = "C108649"; VariantName = "[No Variations]"
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S? PUSH_BUTTON_SMD_6x6
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S? PUSH_BUTTON_SMD_3X4X2
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S? PUSH_BUTTON_SMD_5.2x5.2
