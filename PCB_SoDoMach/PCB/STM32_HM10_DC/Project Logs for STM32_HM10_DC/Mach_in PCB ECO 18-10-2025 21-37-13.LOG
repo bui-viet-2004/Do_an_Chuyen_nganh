@@ -1,0 +1,9 @@
+Removed Member From Class: ClassName=Nguyen_Ly Member=J3
+Added Component: Designator=J?(JST-2.54-2P)
+Added Component: Designator=J?(JST-2.54-2P-90)
+Added Pin To Net: NetName=GND Pin=U?-2
+Added Pin To Net: NetName=VCC Pin=U?-1
+Added Net: Name=VCC
+Added Member To Class: ClassName=Nguyen_Ly Member=Component J? JST-2.54-2P
+Added Member To Class: ClassName=Nguyen_Ly Member=Component J? JST-2.54-2P-90
+Added Rule: Name=Schematic Supply Nets_4

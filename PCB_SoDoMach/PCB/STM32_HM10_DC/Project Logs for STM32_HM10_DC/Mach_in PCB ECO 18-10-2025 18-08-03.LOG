@@ -1,0 +1,13 @@
+Added Component: Designator=J?(FEMALE-2.54-6P)
+Add component (AddParameter): Name = "JLCPCB PN"; Value = "C5224026"; VariantName = "[No Variations]"
+Add Component: Footprint Not Found TO127P2020X500X2100-15
+Added Member To Class: ClassName=Nguyen_Ly Member=Component C2 CAPACITOR 0603
+Added Member To Class: ClassName=Nguyen_Ly Member=Component C4 CAPACITOR 0603
+Added Member To Class: ClassName=Nguyen_Ly Member=Component C7 CAPACITOR 0603
+Added Member To Class: ClassName=Nguyen_Ly Member=Component C8 CAPACITOR 0603
+Added Member To Class: ClassName=Nguyen_Ly Member=Component J? HM-10
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S1 PUSH_BUTTON_6X6
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S2 PUSH_BUTTON_6X6
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S4 PUSH_BUTTON_6X6
+Added Member To Class: ClassName=Nguyen_Ly Member=Component U2 MODULE_LM2596
+Add Class Member: Failed to add class member : Component U L298N
