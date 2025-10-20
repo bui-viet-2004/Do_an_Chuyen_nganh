@@ -1,0 +1,73 @@
+Removed Pin From Net: NetName=GND Pin=C5-1
+Removed Pin From Net: NetName=GND Pin=U2-1
+Removed Pin From Net: NetName=+12 Pin=U2-3
+Removed Pin From Net: NetName=GND Pin=U2-4
+Removed Pin From Net: NetName=GND Pin=U4-2
+Removed Pin From Net: NetName=IN1 Pin=U4-3
+Removed Pin From Net: NetName=IN2 Pin=U4-4
+Removed Member From Class: ClassName=Nguyen_Ly Member=C10
+Removed Member From Class: ClassName=Nguyen_Ly Member=U4
+Removed Member From Class: ClassName=Nguyen_Ly Member=U5
+Change Component Footprint: Designator=J3 Old Footprint=JST-2.54-2P New Footprint=MALE-2.54-4P
+Change Component Comment : Designator=J3 Old Comment=JST-2.54-2P New Comment=SWD
+Change Component Designator: OldDesignator=C6 NewDesignator=C5
+Change Component Designator: OldDesignator=C7 NewDesignator=C6
+Change Component Designator: OldDesignator=C8 NewDesignator=C7
+Change Component Designator: OldDesignator=C9 NewDesignator=C8
+Change Component Designator: OldDesignator=C10 NewDesignator=C9
+Change Component Designator: OldDesignator=J1 NewDesignator=J2
+Change Component Designator: OldDesignator=J2 NewDesignator=J1
+Change Component Designator: OldDesignator=J4 NewDesignator=J6
+Change Component Designator: OldDesignator=U3 NewDesignator=U2
+Change Component Designator: OldDesignator=U5 NewDesignator=U3
+Change component parameters: Designator = "J3" ("J3"); Footprint = "JST-2.54-2P"; UniqueID = "\BHYFBKXT" ("\BHYFBKXT")
+Change component parameters (AddParameter): Name = "JLCPCB PN"; Value = "C492403"; VariantName = "[No Variations]"
+Added Component: Designator=J4(JST-2.54-3P)
+Added Component: Designator=J5(BORNE-5.00-2P)
+Add component (AddParameter): Name = "JLCPCB PN"; Value = "C91153"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=3.3V Pin=J1-2
+Added Pin To Net: NetName=GND Pin=J1-3
+Added Pin To Net: NetName=3.3V Pin=J3-1
+Added Pin To Net: NetName=GND Pin=J3-4
+Added Pin To Net: NetName=IN1 Pin=J4-2
+Added Pin To Net: NetName=IN2 Pin=J4-3
+Added Pin To Net: NetName=+12 Pin=J5-1
+Added Pin To Net: NetName=GND Pin=J5-2
+Added Pin To Net: NetName=+5 Pin=J6-1
+Added Pin To Net: NetName=GND Pin=J6-2
+Added Pin To Net: NetName=Button 1 Pin=U1-10
+Added Pin To Net: NetName=Button 2 Pin=U1-11
+Added Pin To Net: NetName=Button 3 Pin=U1-12
+Added Pin To Net: NetName=Button 4 Pin=U1-13
+Added Pin To Net: NetName=Button 5 Pin=U1-14
+Added Pin To Net: NetName=IN1 Pin=U1-32
+Added Pin To Net: NetName=IN2 Pin=U1-33
+Change Net Name : Old Net Name=NetLabel23 New Net Name=SDA_LCD
+Change Net Name : Old Net Name=NetLabel24 New Net Name=SCL_LCD
+Added Pin To Net: NetName=CD1 Pin=R3-1
+Added Pin To Net: NetName=CD1 Pin=U1-18
+Added Net: Name=CD1
+Added Pin To Net: NetName=CD2 Pin=R4-1
+Added Pin To Net: NetName=CD2 Pin=U1-19
+Added Net: Name=CD2
+Added Pin To Net: NetName=CD3 Pin=R5-1
+Added Pin To Net: NetName=CD3 Pin=U1-21
+Added Net: Name=CD3
+Added Pin To Net: NetName=ENA Pin=J4-1
+Added Net: Name=ENA
+Added Pin To Net: NetName=RX_HM10 Pin=J1-5
+Added Pin To Net: NetName=RX_HM10 Pin=U1-30
+Added Net: Name=RX_HM10
+Added Pin To Net: NetName=SWCLK Pin=J3-3
+Added Pin To Net: NetName=SWCLK Pin=U1-37
+Added Net: Name=SWCLK
+Added Pin To Net: NetName=SWDIO Pin=J3-2
+Added Pin To Net: NetName=SWDIO Pin=U1-34
+Added Net: Name=SWDIO
+Added Pin To Net: NetName=TX_HM10 Pin=J1-4
+Added Pin To Net: NetName=TX_HM10 Pin=U1-31
+Added Net: Name=TX_HM10
+Added Member To Class: ClassName=Nguyen_Ly Member=Component D2 LED_5mm_YELLOW
+Added Member To Class: ClassName=Nguyen_Ly Member=Component J5 L298N_B
+Added Member To Class: ClassName=Nguyen_Ly Member=Component J6 LCD16x2 I2C
+Added Member To Class: ClassName=Nguyen_Ly Member=Component R3 RESISTOR_9.5mm
