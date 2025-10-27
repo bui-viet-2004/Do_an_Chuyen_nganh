@@ -1,0 +1,12 @@
+Removed Pin From Net: NetName=Boot0 Pin=R2-1
+Removed Pin From Net: NetName=GND Pin=R2-2
+Change Component Footprint: Designator=R2 Old Footprint=RESISTOR_PTH_9.5mm New Footprint=RESISTOR_0603
+Change Component Comment : Designator=R2 Old Comment=RESISTOR_9.5mm New Comment=RESISTOR_0603
+Added Pin To Net: NetName=GND Pin=R2-1
+Added Pin To Net: NetName=Boot0 Pin=R2-2
+Added Member To Class: ClassName=Nguyen_Ly Member=Component C7 CAPACITOR 0603
+Added Member To Class: ClassName=Nguyen_Ly Member=Component C8 CAPACITOR 0603
+Added Member To Class: ClassName=Nguyen_Ly Member=Component R3 RESISTOR_0603
+Added Member To Class: ClassName=Nguyen_Ly Member=Component R4 RESISTOR_9.5mm
+Added Member To Class: ClassName=Nguyen_Ly Member=Component R5 RESISTOR_9.5mm
+Added Member To Class: ClassName=Nguyen_Ly Member=Component U3 CRISTAL_16Mhz

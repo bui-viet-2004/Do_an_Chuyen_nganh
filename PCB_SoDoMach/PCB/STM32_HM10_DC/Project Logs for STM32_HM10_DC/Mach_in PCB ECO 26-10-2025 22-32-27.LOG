@@ -1,0 +1,43 @@
+Change Component Designator: OldDesignator=C7 NewDesignator=C9
+Change Component Designator: OldDesignator=C8 NewDesignator=C10
+Change Component Designator: OldDesignator=C9 NewDesignator=C11
+Change Component Designator: OldDesignator=R3 NewDesignator=R4
+Change Component Designator: OldDesignator=R4 NewDesignator=R5
+Change Component Designator: OldDesignator=R5 NewDesignator=R6
+Change Component Designator: OldDesignator=U3 NewDesignator=U4
+Added Component: Designator=C7(CAPACITOR 0603)
+Added Component: Designator=C8(CAPACITOR 0603)
+Added Component: Designator=R3(RESISTOR_0603)
+Added Component: Designator=U3(CRISTAL_16Mhz_SMD)
+Add component (AddParameter): Name = "Digikey PN"; Value = "3155-16M20P2/49US-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mouser PN"; Value = "449-LFXTAL022786BULK"; VariantName = "[No Variations]"
+Added Component: Designator=U5(DHT11)
+Add component (AddParameter): Name = "Digikey PN"; Value = "1528-1228-ND"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=C7-1
+Added Pin To Net: NetName=GND Pin=C8-1
+Added Pin To Net: NetName=3.3V Pin=U5-1
+Added Pin To Net: NetName=GND Pin=U5-4
+Added Pin To Net: NetName=DATA_DHT11 Pin=U1-22
+Added Pin To Net: NetName=DATA_DHT11 Pin=U5-2
+Added Net: Name=DATA_DHT11
+Added Pin To Net: NetName=OSC_IN Pin=C7-2
+Added Pin To Net: NetName=OSC_IN Pin=R3-2
+Added Pin To Net: NetName=OSC_IN Pin=U1-5
+Added Pin To Net: NetName=OSC_IN Pin=U3-2
+Added Net: Name=OSC_IN
+Added Pin To Net: NetName=OSC_OUT Pin=C8-2
+Added Pin To Net: NetName=OSC_OUT Pin=R3-1
+Added Pin To Net: NetName=OSC_OUT Pin=U1-6
+Added Net: Name=OSC_OUT
+Added Member To Class: ClassName=Nguyen_Ly Member=Component C5 CAPCITOR 104
+Added Member To Class: ClassName=Nguyen_Ly Member=Component C8 CAPACITOR 0603
+Added Member To Class: ClassName=Nguyen_Ly Member=Component C9 CAPACITOR 0603
+Added Member To Class: ClassName=Nguyen_Ly Member=Component C10 CAPACITOR 0603
+Added Member To Class: ClassName=Nguyen_Ly Member=Component C11 CAPACITOR 0603
+Added Member To Class: ClassName=Nguyen_Ly Member=Component J2 JACK_P4
+Added Member To Class: ClassName=Nguyen_Ly Member=Component J4 L298N_A
+Added Member To Class: ClassName=Nguyen_Ly Member=Component R6 RESISTOR_9.5mm
+Added Member To Class: ClassName=Nguyen_Ly Member=Component U2 MODULE_LM2596
+Added Member To Class: ClassName=Nguyen_Ly Member=Component U3 CRISTAL_16Mhz
+Added Member To Class: ClassName=Nguyen_Ly Member=Component U4 AMS1117
+Added Member To Class: ClassName=Nguyen_Ly Member=Component U5 DHT11
