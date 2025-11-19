@@ -1,0 +1,8 @@
+Removed Member From Class: ClassName=Nguyen_Ly Member=S6
+Change Component Designator: OldDesignator=S1 NewDesignator=S10
+Change Component Designator: OldDesignator=S2 NewDesignator=S1
+Change Component Designator: OldDesignator=S3 NewDesignator=S2
+Change Component Designator: OldDesignator=S4 NewDesignator=S3
+Change Component Designator: OldDesignator=S5 NewDesignator=S4
+Change Component Designator: OldDesignator=S6 NewDesignator=S5
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S10 PUSH_BUTTON_6X6
