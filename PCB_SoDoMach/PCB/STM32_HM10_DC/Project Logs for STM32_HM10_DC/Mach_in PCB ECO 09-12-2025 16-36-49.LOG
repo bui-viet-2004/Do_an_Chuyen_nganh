@@ -1,0 +1,23 @@
+Removed Pin From Net: NetName=GND Pin=D1-2
+Removed Member From Class: ClassName=Nguyen_Ly Member=S10
+Change Component Designator: OldDesignator=C1 NewDesignator=C2
+Change Component Designator: OldDesignator=C2 NewDesignator=C3
+Change Component Designator: OldDesignator=C3 NewDesignator=C4
+Change Component Designator: OldDesignator=C4 NewDesignator=C5
+Change Component Designator: OldDesignator=C5 NewDesignator=C1
+Change Component Designator: OldDesignator=D2 NewDesignator=D1
+Change Component Designator: OldDesignator=D3 NewDesignator=D2
+Change Component Designator: OldDesignator=J3 NewDesignator=J4
+Change Component Designator: OldDesignator=J4 NewDesignator=J3
+Change Component Designator: OldDesignator=R5 NewDesignator=R4
+Change Component Designator: OldDesignator=R6 NewDesignator=R5
+Change Component Designator: OldDesignator=S1 NewDesignator=S2
+Change Component Designator: OldDesignator=S2 NewDesignator=S3
+Change Component Designator: OldDesignator=S3 NewDesignator=S4
+Change Component Designator: OldDesignator=S4 NewDesignator=S5
+Change Component Designator: OldDesignator=S5 NewDesignator=S6
+Change Component Designator: OldDesignator=S10 NewDesignator=S1
+Change Net Name : Old Net Name=CD3 New Net Name=CD1
+Change Net Name : Old Net Name=NetD2_1 New Net Name=NetD1_1
+Change Net Name : Old Net Name=NetD3_1 New Net Name=NetD2_1
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S6 PUSH_BUTTON_6X6
