@@ -21,6 +21,7 @@
 "stm32_ble_dc\system_stm32f1xx.o"
 "stm32_ble_dc\delay_timer.o"
 "stm32_ble_dc\dht.o"
+"stm32_ble_dc\lcd_i2c.o"
 --strict --scatter "STM32_BLE_DC\STM32_BLE_DC.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

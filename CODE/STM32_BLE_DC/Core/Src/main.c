@@ -3,6 +3,7 @@
 #include "string.h"
 #include "DHT.h"
 #include "delay_timer.h"
+#include "lcd_i2c.h"
 
 I2C_HandleTypeDef hi2c1;
 TIM_HandleTypeDef htim1;
@@ -16,13 +17,13 @@ static void MX_TIM1_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_USART1_UART_Init(void);
 
-#define Dia_chi_LCD 0x4E
 #define DHT_GPIO_Port GPIOB
 #define DHT_Pin GPIO_PIN_11
 #define LED_FAN_PORT   GPIOB
 #define LED_FAN_PIN    GPIO_PIN_10
 #define LED_AUTO_PORT  GPIOB
 #define LED_AUTO_PIN   GPIO_PIN_1
+#define Dia_chi_LCD 0x4E
 
 DHT_Name DHT1;
 
@@ -36,59 +37,6 @@ int auto_mode_old = 0;
 char M[100];
 uint8_t buffer;        
 float temperature = 0.0;
-
-
-void Lcd_Ghi_Lenh (char lenh)
-{
- char data_u, data_l;
- uint8_t data_t[4];
- data_u = (lenh&0xf0);
- data_l = ((lenh<<4)&0xf0);
- data_t[0] = data_u|0x0C; //en=1, rs=0
- data_t[1] = data_u|0x08; //en=0, rs=0
- data_t[2] = data_l|0x0C; //en=1, rs=0
- data_t[3] = data_l|0x08; //en=0, rs=0
- HAL_I2C_Master_Transmit (&hi2c1, Dia_chi_LCD,(uint8_t *) data_t, 4, 100);
-} 
-
-void Lcd_Ghi_Dulieu (char data)
-{
- char data_u, data_l;
- uint8_t data_t[4];
- data_u = (data&0xf0);
- data_l = ((data<<4)&0xf0);
- data_t[0] = data_u|0x0D; //en=1, rs=1
- data_t[1] = data_u|0x09; //en=0, rs=1
- data_t[2] = data_l|0x0D; //en=1, rs=1
- data_t[3] = data_l|0x09; //en=0, rs=1
- HAL_I2C_Master_Transmit (&hi2c1, Dia_chi_LCD,(uint8_t *) data_t, 4, 100);
-}
-
-void lcd_init (void)
-{
- Lcd_Ghi_Lenh (0x03);
- HAL_Delay(50);
- Lcd_Ghi_Lenh (0x02);
- HAL_Delay(50);
- Lcd_Ghi_Lenh (0x06);
- HAL_Delay(50);
- Lcd_Ghi_Lenh (0x0c);
- HAL_Delay(50);
- Lcd_Ghi_Lenh (0x28);
- HAL_Delay(50);
- Lcd_Ghi_Lenh (0x80);
-} 
-
-void Lcd_Ghi_Chuoi (char *str)
-{
- while (*str)
-	 Lcd_Ghi_Dulieu (*str++);
-}
-
-void Lcd_xoa_manhinh (void)
-{
- Lcd_Ghi_Lenh (0x01); //xoa man hinh
-}
 
 
 void Fan_SetLevel (int level)
@@ -187,6 +135,8 @@ int main(void)
   MX_TIM1_Init();
 	MX_TIM2_Init();
   MX_USART1_UART_Init();
+
+	hi2c_lcd = &hi2c1;
 	
 	lcd_init();
 	

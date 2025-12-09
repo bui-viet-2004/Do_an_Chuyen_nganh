@@ -1,4 +1,5 @@
-stm32_ble_dc/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
+stm32_ble_dc/lcd_i2c.o: ..\..\..\..\..\Shared_Libraries\Keil_C\lcd_i2c.c \
+  ..\..\..\..\..\Shared_Libraries\Keil_C\lcd_i2c.h \
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal.h \
   ..\Core\Inc\stm32f1xx_hal_conf.h \
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rcc.h \
@@ -21,7 +22,4 @@ stm32_ble_dc/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_pwr.h \
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_tim.h \
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_tim_ex.h \
-  ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_uart.h \
-  ..\..\..\..\..\Shared_Libraries\Keil_C\DHT.h \
-  ..\..\..\..\..\Shared_Libraries\Keil_C\delay_timer.h \
-  ..\..\..\..\..\Shared_Libraries\Keil_C\lcd_i2c.h
+  ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_uart.h
