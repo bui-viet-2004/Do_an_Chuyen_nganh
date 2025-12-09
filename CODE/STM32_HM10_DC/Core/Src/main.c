@@ -59,8 +59,16 @@ if(cmd == '1')
 	if(fan_power == 0)
 	{
 		Fan_SetLevel(0);
-		auto_mode = 0; 
+		auto_mode = 0;
+		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12,0);
+		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_13,0);
 	}
+	else
+	{
+		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12,1);
+		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_13,1);
+	}
+	
 }
 else if(cmd == '2' && fan_power) auto_mode ^= 1;
 else if(cmd == '3' && fan_power) Fan_SetLevel(1);
@@ -108,6 +116,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		{
 			Fan_SetLevel(0);
 			auto_mode = 0;
+			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12,0);
+			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_13,0);
+		}
+		else
+		{
+			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12,1);
+			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_13,1);
 		}
 	}
 	else if(GPIO_Pin == GPIO_PIN_1 && fan_power)
