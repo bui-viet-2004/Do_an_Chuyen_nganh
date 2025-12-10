@@ -1,7 +1,7 @@
 Protel Design System Design Rule Check
 PCB File : D:\HocTap\Embedded_IoT\GitHub\Do_an_Chuyen_nganh\PCB\STM32_HM10_DC\Mach_in.PcbDoc
-Date     : 09/12/2025
-Time     : 23:20:05
+Date     : 10/12/2025
+Time     : 11:50:32
 
 Processing Rule : Clearance Constraint (Gap=0.2mm) (All),(All)
 Rule Violations :0
@@ -10,11 +10,11 @@ Processing Rule : Short-Circuit Constraint (Allowed=No) (All),(All)
 Rule Violations :0
 
 Processing Rule : Un-Routed Net Constraint ( (All) )
-   Violation between Un-Routed Net Constraint: Net Button 1 Between Pad S2-2(101.906mm,26.253mm) on Multi-Layer And Pad S2-2(108.406mm,26.253mm) on Multi-Layer 
+   Violation between Un-Routed Net Constraint: Net Button 1 Between Pad S2-2(101.906mm,26.253mm) on Multi-Layer And Track (116.205mm,50.835mm)(116.205mm,54.421mm) on Bottom Layer 
    Violation between Un-Routed Net Constraint: Net Button 2 Between Pad S3-2(118.467mm,26.253mm) on Multi-Layer And Pad S3-2(124.966mm,26.253mm) on Multi-Layer 
    Violation between Un-Routed Net Constraint: Net Button 3 Between Pad S4-2(135.027mm,26.253mm) on Multi-Layer And Pad S4-2(141.527mm,26.253mm) on Multi-Layer 
    Violation between Un-Routed Net Constraint: Net Button 4 Between Pad S5-2(151.588mm,26.253mm) on Multi-Layer And Pad S5-2(158.087mm,26.253mm) on Multi-Layer 
-   Violation between Un-Routed Net Constraint: Net Button 5 Between Pad S6-2(168.148mm,26.253mm) on Multi-Layer And Pad S6-2(174.648mm,26.253mm) on Multi-Layer 
+   Violation between Un-Routed Net Constraint: Net Button 5 Between Pad S6-2(168.148mm,26.253mm) on Multi-Layer And Track (174.752mm,26.357mm)(174.752mm,30.48mm) on Bottom Layer 
    Violation between Un-Routed Net Constraint: Track (193.421mm,10.922mm)(193.421mm,115.113mm) on Bottom Layer Dead Copper - Net Not Assigned.
    Violation between Un-Routed Net Constraint: Track (23.495mm,10.922mm)(193.421mm,10.922mm) on Bottom Layer Dead Copper - Net Not Assigned.
    Violation between Un-Routed Net Constraint: Track (23.495mm,10.922mm)(23.495mm,115.113mm) on Bottom Layer Dead Copper - Net Not Assigned.
