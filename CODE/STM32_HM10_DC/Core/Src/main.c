@@ -3,18 +3,18 @@
 #include "string.h"
 #include "DHT.h"
 #include "delay_timer.h"
-#include "lcd_i2c.h"
+
 
 I2C_HandleTypeDef hi2c1;
 TIM_HandleTypeDef htim1;
-TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim4;
 UART_HandleTypeDef huart1;
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_TIM1_Init(void);
-static void MX_TIM2_Init(void);
+static void MX_TIM4_Init(void);
 static void MX_USART1_UART_Init(void);
 
 #define DHT_GPIO_Port GPIOB
@@ -24,8 +24,9 @@ static void MX_USART1_UART_Init(void);
 #define LED_AUTO_PORT  GPIOB
 #define LED_AUTO_PIN   GPIO_PIN_1
 #define Dia_chi_LCD 0x4E
+#define UPDATE_INTERVAL 1000 
 
-DHT_Name DHT1;
+uint32_t last_update = 0;  
 
 int fan_level = 0;
 int fan_power = 0;
@@ -35,9 +36,63 @@ int fan_power_old = 0;
 int auto_mode_old = 0;
 
 char M[100];
-uint8_t buffer;        
+char buffer[1];
+
 float temperature = 0.0;
 
+
+void Lcd_Ghi_Lenh (uint8_t lenh)
+{
+ char data_u, data_l;
+ uint8_t data_t[4];
+ data_u = (lenh&0xf0);
+ data_l = ((lenh<<4)&0xf0);
+ data_t[0] = data_u|0x0C; //en=1, rs=0
+ data_t[1] = data_u|0x08; //en=0, rs=0
+ data_t[2] = data_l|0x0C; //en=1, rs=0
+ data_t[3] = data_l|0x08; //en=0, rs=0
+ HAL_I2C_Master_Transmit (&hi2c1, Dia_chi_LCD,(uint8_t *) data_t, 4, 100);
+} 
+
+void Lcd_Ghi_Dulieu (uint8_t data)
+{
+ char data_u, data_l;
+ uint8_t data_t[4];
+ data_u = (data&0xf0);
+ data_l = ((data<<4)&0xf0);
+ data_t[0] = data_u|0x0D; //en=1, rs=1
+ data_t[1] = data_u|0x09; //en=0, rs=1
+ data_t[2] = data_l|0x0D; //en=1, rs=1
+ data_t[3] = data_l|0x09; //en=0, rs=1
+ HAL_I2C_Master_Transmit (&hi2c1, Dia_chi_LCD,(uint8_t *) data_t, 4, 100);
+}
+
+void lcd_init (void)
+{
+ Lcd_Ghi_Lenh (0x03);
+ HAL_Delay(50);
+ Lcd_Ghi_Lenh (0x02);
+ HAL_Delay(50);
+ Lcd_Ghi_Lenh (0x06);
+ HAL_Delay(50);
+ Lcd_Ghi_Lenh (0x0c);
+ HAL_Delay(50);
+ Lcd_Ghi_Lenh (0x28);
+ HAL_Delay(50);
+ Lcd_Ghi_Lenh (0x80);
+} 
+
+void Lcd_Ghi_Chuoi (char *str)
+{
+ while (*str)
+	 Lcd_Ghi_Dulieu (*str++);
+}
+
+void Lcd_xoa_manhinh (void)
+{
+ Lcd_Ghi_Lenh (0x01); //xoa man hinh
+	HAL_Delay(2);
+}
 
 void Fan_SetLevel (int level)
 {
@@ -53,31 +108,32 @@ void Fan_SetLevel (int level)
 
 void HM10_Process(char cmd)
 {
-if(cmd == '1')
-{
-	fan_power ^= 1;
-	if(fan_power == 0)
+	if(cmd == '0')
 	{
-		Fan_SetLevel(0);
-		auto_mode = 0;
-		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12,0);
-		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_13,0);
+		fan_power ^= 1;
+		
+		if(fan_power == 0)
+		{
+			Fan_SetLevel(0);
+			auto_mode = 0;
+			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12,0);
+			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_13,0);
+		}
+		else
+		{
+			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12,1);
+			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_13,1);
+		}
 	}
-	else
-	{
-		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12,1);
-		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_13,1);
-	}
-	
-}
-else if(cmd == '2' && fan_power) auto_mode ^= 1;
-else if(cmd == '3' && fan_power) Fan_SetLevel(1);
-else if(cmd == '4' && fan_power) Fan_SetLevel(2);
-else if(cmd == '5' && fan_power) Fan_SetLevel(3);
+	else if(cmd == '1' && fan_power) auto_mode ^= 1;
+	else if(cmd == '2' && fan_power) Fan_SetLevel(1);
+	else if(cmd == '3' && fan_power) Fan_SetLevel(2);
+	else if(cmd == '4' && fan_power) Fan_SetLevel(3);
 }
 
 void LCD_Update()
 {
+	Lcd_xoa_manhinh();
 	Lcd_Ghi_Lenh(0x80);
 	sprintf(M,"Nhiet do: %.1f'C",temperature);
 	Lcd_Ghi_Chuoi(M);
@@ -101,46 +157,53 @@ void LED_Update(void)
 }	
 
 
-void EXTI0_IRQHandler(void) { HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0); }
-void EXTI1_IRQHandler(void) { HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_1); }
-void EXTI2_IRQHandler(void) { HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_2); }
-void EXTI3_IRQHandler(void) { HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3); }
-void EXTI4_IRQHandler(void) { HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_4); }
-
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-	if(GPIO_Pin == GPIO_PIN_0)      
-	{
-		fan_power ^= 1;
-		if(fan_power == 0)
-		{
-			Fan_SetLevel(0);
-			auto_mode = 0;
-			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12,0);
-			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_13,0);
-		}
-		else
-		{
-			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12,1);
-			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_13,1);
-		}
-	}
-	else if(GPIO_Pin == GPIO_PIN_1 && fan_power)
-	{
-		auto_mode ^= 1;
-	}
-	else if(GPIO_Pin == GPIO_PIN_2 && auto_mode == 0) Fan_SetLevel(1);
-	else if(GPIO_Pin == GPIO_PIN_3 && auto_mode == 0) Fan_SetLevel(2);
-	else if(GPIO_Pin == GPIO_PIN_4 && auto_mode == 0) Fan_SetLevel(3);
-
-	LED_Update();
+void EXTI0_IRQHandler(void) 
+{ 
+	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);   
 	
+	fan_power ^= 1;
+	if(fan_power == 0)
+	{
+		Fan_SetLevel(0);
+		auto_mode = 0;
+		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12,0);
+		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_13,0);
+	}
+	else
+	{
+		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12,1);
+		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_13,1);
+	}
+		
+}
+
+void EXTI1_IRQHandler(void) 
+{ 
+	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_1);
+	auto_mode ^= 1;
+}
+
+void EXTI2_IRQHandler(void) 
+{ 
+	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_2); 
+	if(auto_mode == 0) Fan_SetLevel(1);
+}
+
+void EXTI3_IRQHandler(void) 
+{ 
+	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
+	if(auto_mode == 0) Fan_SetLevel(2);
+}
+
+void EXTI4_IRQHandler(void) 
+{ 
+	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_4); 
+	if(auto_mode == 0) Fan_SetLevel(3);
 }
 
 
 int main(void)
 {
-	
   HAL_Init();
 
   SystemClock_Config();
@@ -148,58 +211,66 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C1_Init();
   MX_TIM1_Init();
-	MX_TIM2_Init();
+	MX_TIM4_Init();
   MX_USART1_UART_Init();
 
-	hi2c_lcd = &hi2c1;
+	HAL_TIM_Base_Start(&htim1);
+	HAL_TIM_Base_Start(&htim4);
+	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 	
 	lcd_init();
 	
-	DHT_Init(&DHT1, DHT11, &htim2, DHT_GPIO_Port, DHT_Pin);
-	
-	HAL_TIM_Base_Start(&htim1);
-	HAL_TIM_Base_Start(&htim2);
-	
-	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+	DHT11_InitTypeDef dht;
+	DHT11_StatusTypeDef err;
+	HAL_DHT11_Init(&dht, GPIOB, GPIO_PIN_11, &htim4);
 	
 	Fan_SetLevel(0);
+	
+	Lcd_xoa_manhinh();
+	Lcd_Ghi_Lenh(0x84);
+	sprintf(M,"Wait.....");
+	Lcd_Ghi_Chuoi(M);
+	HAL_Delay(1000);
+	LCD_Update();
+	LED_Update();
+	
   
   while (1)
 	{
-    if(HAL_UART_Receive(&huart1, &buffer, 100, 1) == HAL_OK)
+		uint32_t now = HAL_GetTick();
+		if(now - last_update >= UPDATE_INTERVAL)
+		{
+			last_update = now;
+			if(fan_power != fan_power_old || auto_mode != auto_mode_old || fan_level != fan_level_old)
+			{
+				LCD_Update();
+				LED_Update();
+				fan_power_old = fan_power;
+				auto_mode_old = auto_mode;
+				fan_level_old = fan_level;
+			}
+		}
+				
+    if(HAL_UART_Receive(&huart1, buffer, 1, 100) == HAL_OK)
     {
-        HM10_Process(buffer);
-
-        if( fan_power != fan_power_old ||
-            auto_mode != auto_mode_old ||
-            fan_level != fan_level_old )
-        {
-            LCD_Update();
-						LED_Update();
-
-            fan_power_old = fan_power;
-            auto_mode_old = auto_mode;
-            fan_level_old = fan_level;
-        }
+			char cmd = buffer[0];
+			HM10_Process(cmd);
     }
 
     
     static uint32_t t = 0;
-    if(HAL_GetTick() - t >= 300)
+    if(HAL_GetTick() - t >= 500)
     {
-        t = HAL_GetTick();
-
-        DHT_ReadTempHum(&DHT1);
-        temperature = DHT1.Temp;
-
-        if(auto_mode && fan_power)
-        {
-            if(temperature < 30) Fan_SetLevel(1);
-            else if(temperature < 36) Fan_SetLevel(2);
-            else Fan_SetLevel(3);
-        }
-
-        LCD_Update();
+			t = HAL_GetTick();
+			HAL_DHT11_ReadData(&dht);   
+			temperature = dht.Temperature;
+			if(auto_mode && fan_power)
+			{
+				if(temperature < 30) Fan_SetLevel(1);
+				else if(temperature < 36) Fan_SetLevel(2);
+				else Fan_SetLevel(3);
+			}
+			LCD_Update();
     }
 		
 	}
@@ -354,47 +425,47 @@ static void MX_TIM1_Init(void)
 }
 
 /**
-  * @brief TIM2 Initialization Function
+  * @brief TIM4 Initialization Function
   * @param None
   * @retval None
   */
-static void MX_TIM2_Init(void)
+static void MX_TIM4_Init(void)
 {
 
-  /* USER CODE BEGIN TIM2_Init 0 */
+  /* USER CODE BEGIN TIM4_Init 0 */
 
-  /* USER CODE END TIM2_Init 0 */
+  /* USER CODE END TIM4_Init 0 */
 
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
 
-  /* USER CODE BEGIN TIM2_Init 1 */
+  /* USER CODE BEGIN TIM4_Init 1 */
 
-  /* USER CODE END TIM2_Init 1 */
-  htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 71;
-  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 65535;
-  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  /* USER CODE END TIM4_Init 1 */
+  htim4.Instance = TIM4;
+  htim4.Init.Prescaler = 71;
+  htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim4.Init.Period = 65534;
+  htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
   {
     Error_Handler();
   }
   sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  if (HAL_TIM_ConfigClockSource(&htim4, &sClockSourceConfig) != HAL_OK)
   {
     Error_Handler();
   }
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim4, &sMasterConfig) != HAL_OK)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN TIM2_Init 2 */
+  /* USER CODE BEGIN TIM4_Init 2 */
 
-  /* USER CODE END TIM2_Init 2 */
+  /* USER CODE END TIM4_Init 2 */
 
 }
 

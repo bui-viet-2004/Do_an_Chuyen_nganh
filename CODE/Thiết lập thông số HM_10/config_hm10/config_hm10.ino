@@ -1,23 +1,18 @@
-#include <SoftwareSerial.h>
-
-SoftwareSerial BT(10, 11); // RX = 10, TX = 11
+HardwareSerial HM10(2); // UART2
 
 void setup() {
-  Serial.begin(9600);
-  BT.begin(9600);
-  Serial.println("Nhập lệnh AT cho HM10:");
+  Serial.begin(115200);
+
+  HM10.begin(9600, SERIAL_8N1, 25, 26); 
+  // RX=16, TX=17 (tuỳ bạn)
 }
 
 void loop() {
-  // Gửi dữ liệu từ Serial Monitor đến HM10
-  if (Serial.available()) {
-    char c = Serial.read();
-    BT.write(c);
+  if (HM10.available()) {
+    Serial.write(HM10.read());
   }
 
-  // Nhận phản hồi từ HM10 và in ra Serial Monitor
-  if (BT.available()) {
-    char c = BT.read();
-    Serial.write(c);
+  if (Serial.available()) {
+    HM10.write(Serial.read());
   }
 }

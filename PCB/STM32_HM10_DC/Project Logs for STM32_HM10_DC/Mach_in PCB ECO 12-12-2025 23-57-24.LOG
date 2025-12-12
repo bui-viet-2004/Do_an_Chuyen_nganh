@@ -1,0 +1,16 @@
+Added Component: Designator=R6(RESISTOR_PTH_9.5mm)
+Added Pin To Net: NetName=DATA_DHT11 Pin=R6-1
+Added Pin To Net: NetName=3.3V Pin=R6-2
+Added Member To Class: ClassName=Nguyen_Ly Member=Component C2 CAPACITOR 0603
+Added Member To Class: ClassName=Nguyen_Ly Member=Component C4 CAPACITOR 0603
+Added Member To Class: ClassName=Nguyen_Ly Member=Component C5 CAPACITOR 0603
+Added Member To Class: ClassName=Nguyen_Ly Member=Component D1 LED_5mm_YELLOW
+Added Member To Class: ClassName=Nguyen_Ly Member=Component D2 LED_5mm_RED
+Added Member To Class: ClassName=Nguyen_Ly Member=Component J3 L298N_A
+Added Member To Class: ClassName=Nguyen_Ly Member=Component R4 RESISTOR_9.5mm
+Added Member To Class: ClassName=Nguyen_Ly Member=Component R5 RESISTOR_9.5mm
+Added Member To Class: ClassName=Nguyen_Ly Member=Component R6 RESISTOR_9.5mm
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S1 PUSH_BUTTON_6X6
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S2 PUSH_BUTTON_6X6
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S4 PUSH_BUTTON_6X6
+Added Member To Class: ClassName=Nguyen_Ly Member=Component S5 PUSH_BUTTON_6X6
