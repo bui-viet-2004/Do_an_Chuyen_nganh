@@ -23,4 +23,4 @@ stm32_ble_dc/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_tim_ex.h \
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_uart.h \
   ..\..\..\..\..\Shared_Libraries\Keil_C\DHT.h \
-  ..\..\..\..\..\Shared_Libraries\Keil_C\delay_timer.h
+  ..\..\..\..\..\Shared_Libraries\Keil_C\lcd_i2c.h

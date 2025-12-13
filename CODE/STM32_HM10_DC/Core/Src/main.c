@@ -2,13 +2,14 @@
 #include "stdio.h"
 #include "string.h"
 #include "DHT.h"
-#include "delay_timer.h"
+#include "lcd_i2c.h"
 
 
 I2C_HandleTypeDef hi2c1;
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim4;
 UART_HandleTypeDef huart1;
+
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -17,14 +18,13 @@ static void MX_TIM1_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_USART1_UART_Init(void);
 
+
 #define DHT_GPIO_Port GPIOB
 #define DHT_Pin GPIO_PIN_11
 #define LED_FAN_PORT   GPIOB
 #define LED_FAN_PIN    GPIO_PIN_10
 #define LED_AUTO_PORT  GPIOB
-#define LED_AUTO_PIN   GPIO_PIN_1
-#define Dia_chi_LCD 0x4E
-#define UPDATE_INTERVAL 1000 
+#define LED_AUTO_PIN   GPIO_PIN_1 
 
 uint32_t last_update = 0;  
 
@@ -36,64 +36,11 @@ int fan_power_old = 0;
 int auto_mode_old = 0;
 
 char M[100];
-char buffer[1];
+char buffer_rx[1];
 char buffer_tx[20];
 
 float temperature = 0.0;
 
-
-void Lcd_Ghi_Lenh (uint8_t lenh)
-{
- char data_u, data_l;
- uint8_t data_t[4];
- data_u = (lenh&0xf0);
- data_l = ((lenh<<4)&0xf0);
- data_t[0] = data_u|0x0C; //en=1, rs=0
- data_t[1] = data_u|0x08; //en=0, rs=0
- data_t[2] = data_l|0x0C; //en=1, rs=0
- data_t[3] = data_l|0x08; //en=0, rs=0
- HAL_I2C_Master_Transmit (&hi2c1, Dia_chi_LCD,(uint8_t *) data_t, 4, 100);
-} 
-
-void Lcd_Ghi_Dulieu (uint8_t data)
-{
- char data_u, data_l;
- uint8_t data_t[4];
- data_u = (data&0xf0);
- data_l = ((data<<4)&0xf0);
- data_t[0] = data_u|0x0D; //en=1, rs=1
- data_t[1] = data_u|0x09; //en=0, rs=1
- data_t[2] = data_l|0x0D; //en=1, rs=1
- data_t[3] = data_l|0x09; //en=0, rs=1
- HAL_I2C_Master_Transmit (&hi2c1, Dia_chi_LCD,(uint8_t *) data_t, 4, 100);
-}
-
-void lcd_init (void)
-{
- Lcd_Ghi_Lenh (0x03);
- HAL_Delay(50);
- Lcd_Ghi_Lenh (0x02);
- HAL_Delay(50);
- Lcd_Ghi_Lenh (0x06);
- HAL_Delay(50);
- Lcd_Ghi_Lenh (0x0c);
- HAL_Delay(50);
- Lcd_Ghi_Lenh (0x28);
- HAL_Delay(50);
- Lcd_Ghi_Lenh (0x80);
-} 
-
-void Lcd_Ghi_Chuoi (char *str)
-{
- while (*str)
-	 Lcd_Ghi_Dulieu (*str++);
-}
-
-void Lcd_xoa_manhinh (void)
-{
- Lcd_Ghi_Lenh (0x01); //xoa man hinh
-	HAL_Delay(2);
-}
 
 void Fan_SetLevel (int level)
 {
@@ -143,17 +90,14 @@ void LCD_Update()
 	else sprintf(M,"Auto:Off   Lv: %d",fan_level);
 	Lcd_Ghi_Chuoi(M);
 	
-	
 	int len = sprintf(M,
-    "#0:%.1f'C\r\n"
-    "#1:%s Lv:%d\r\n",
-    temperature,
-    auto_mode ? "Auto" : "Man",
-    fan_level
-	);
-
+											"#0:%.1f'C\r\n"
+											"#1:%s Lv:%d\r\n",
+											temperature,
+											auto_mode ? "Auto" : "Man ",
+											fan_level
+										);
 	HAL_UART_Transmit(&huart1, (uint8_t*)M, len, 100);
-
 	
 	if(fan_power != fan_power_old)
 	{
@@ -168,7 +112,6 @@ void LCD_Update()
 
     fan_power_old = fan_power;
 	}
-
 }
 
 void LED_Update(void)
@@ -266,7 +209,7 @@ int main(void)
   while (1)
 	{
 		uint32_t now = HAL_GetTick();
-		if(now - last_update >= UPDATE_INTERVAL)
+		if(now - last_update >= 1000)
 		{
 			last_update = now;
 			if(fan_power != fan_power_old || auto_mode != auto_mode_old || fan_level != fan_level_old)
@@ -279,13 +222,12 @@ int main(void)
 			}
 		}
 				
-    if(HAL_UART_Receive(&huart1, buffer, 1, 100) == HAL_OK)
+    if(HAL_UART_Receive(&huart1, buffer_rx, 1, 100) == HAL_OK)
     {
-			char cmd = buffer[0];
+			char cmd = buffer_rx[0];
 			HM10_Process(cmd);
     }
 
-    
     static uint32_t t = 0;
     if(HAL_GetTick() - t >= 1000)
     {
@@ -301,10 +243,14 @@ int main(void)
 			LCD_Update();
     }
 		
-		
 	}
   
 }
+
+
+
+
+
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};

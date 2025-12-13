@@ -1,0 +1,12 @@
+Change Component Designator: OldDesignator=J6 NewDesignator=J8
+Added Component: Designator=J6(BORNE-5.00-2P)
+Add component (AddParameter): Name = "JLCPCB PN"; Value = "C91153"; VariantName = "[No Variations]"
+Added Component: Designator=J7(JST-2.54-2P)
+Added Pin To Net: NetName=NetJ6_1 Pin=J6-1
+Added Pin To Net: NetName=NetJ6_1 Pin=J7-2
+Added Net: Name=NetJ6_1
+Added Pin To Net: NetName=NetJ6_2 Pin=J6-2
+Added Pin To Net: NetName=NetJ6_2 Pin=J7-1
+Added Net: Name=NetJ6_2
+Added Member To Class: ClassName=Nguyen_Ly Member=Component J7 JST-2.54-2P
+Added Member To Class: ClassName=Nguyen_Ly Member=Component J8 LCD16x2 I2C
