@@ -37,6 +37,7 @@ int auto_mode_old = 0;
 
 char M[100];
 char buffer[1];
+char buffer_tx[20];
 
 float temperature = 0.0;
 
@@ -126,9 +127,9 @@ void HM10_Process(char cmd)
 		}
 	}
 	else if(cmd == '1' && fan_power) auto_mode ^= 1;
-	else if(cmd == '2' && fan_power) Fan_SetLevel(1);
-	else if(cmd == '3' && fan_power) Fan_SetLevel(2);
-	else if(cmd == '4' && fan_power) Fan_SetLevel(3);
+	else if(cmd == '2' && fan_power && auto_mode == 0) Fan_SetLevel(1);
+	else if(cmd == '3' && fan_power && auto_mode == 0) Fan_SetLevel(2);
+	else if(cmd == '4' && fan_power && auto_mode == 0) Fan_SetLevel(3);
 }
 
 void LCD_Update()
@@ -141,6 +142,33 @@ void LCD_Update()
 	if(auto_mode) sprintf(M,"Auto:On    Lv: %d",fan_level);
 	else sprintf(M,"Auto:Off   Lv: %d",fan_level);
 	Lcd_Ghi_Chuoi(M);
+	
+	
+	int len = sprintf(M,
+    "#0:%.1f'C\r\n"
+    "#1:%s Lv:%d\r\n",
+    temperature,
+    auto_mode ? "Auto" : "Man",
+    fan_level
+	);
+
+	HAL_UART_Transmit(&huart1, (uint8_t*)M, len, 100);
+
+	
+	if(fan_power != fan_power_old)
+	{
+    int lenn;
+
+    if(fan_power)
+        lenn = sprintf(M, "@Power On\r\n");
+    else
+        lenn = sprintf(M, "@Power Off\r\n");
+
+    HAL_UART_Transmit(&huart1, (uint8_t*)M, lenn, 100);
+
+    fan_power_old = fan_power;
+	}
+
 }
 
 void LED_Update(void)
@@ -186,19 +214,19 @@ void EXTI1_IRQHandler(void)
 void EXTI2_IRQHandler(void) 
 { 
 	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_2); 
-	if(auto_mode == 0) Fan_SetLevel(1);
+	if(auto_mode == 0 && fan_power) Fan_SetLevel(1);
 }
 
 void EXTI3_IRQHandler(void) 
 { 
 	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
-	if(auto_mode == 0) Fan_SetLevel(2);
+	if(auto_mode == 0 && fan_power) Fan_SetLevel(2);
 }
 
 void EXTI4_IRQHandler(void) 
 { 
 	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_4); 
-	if(auto_mode == 0) Fan_SetLevel(3);
+	if(auto_mode == 0 && fan_power) Fan_SetLevel(3);
 }
 
 
@@ -259,7 +287,7 @@ int main(void)
 
     
     static uint32_t t = 0;
-    if(HAL_GetTick() - t >= 500)
+    if(HAL_GetTick() - t >= 1000)
     {
 			t = HAL_GetTick();
 			HAL_DHT11_ReadData(&dht);   
@@ -272,6 +300,7 @@ int main(void)
 			}
 			LCD_Update();
     }
+		
 		
 	}
   

@@ -1,7 +1,7 @@
 Protel Design System Design Rule Check
 PCB File : D:\HocTap\Embedded_IoT\GitHub\Do_an_Chuyen_nganh\PCB\STM32_HM10_DC\Mach_in.PcbDoc
-Date     : 10/12/2025
-Time     : 11:50:32
+Date     : 13/12/2025
+Time     : 10:58:34
 
 Processing Rule : Clearance Constraint (Gap=0.2mm) (All),(All)
 Rule Violations :0
@@ -329,4 +329,4 @@ Rule Violations :0
 
 Violations Detected : 269
 Waived Violations : 0
-Time Elapsed        : 00:00:00
+Time Elapsed        : 00:00:01
