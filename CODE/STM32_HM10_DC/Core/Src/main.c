@@ -26,7 +26,6 @@ static void MX_USART1_UART_Init(void);
 #define LED_AUTO_PORT  GPIOB
 #define LED_AUTO_PIN   GPIO_PIN_1 
 
-uint32_t last_update = 0;  
 
 int fan_level = 0;
 int fan_power = 0;
@@ -59,18 +58,10 @@ void HM10_Process(char cmd)
 	if(cmd == '0')
 	{
 		fan_power ^= 1;
-		
 		if(fan_power == 0)
 		{
 			Fan_SetLevel(0);
 			auto_mode = 0;
-			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12,0);
-			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_13,0);
-		}
-		else
-		{
-			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12,1);
-			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_13,1);
 		}
 	}
 	else if(cmd == '1' && fan_power) auto_mode ^= 1;
@@ -128,50 +119,69 @@ void LED_Update(void)
 }	
 
 
-void EXTI0_IRQHandler(void) 
-{ 
-	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);   
-	
-	fan_power ^= 1;
-	if(fan_power == 0)
-	{
-		Fan_SetLevel(0);
-		auto_mode = 0;
-		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12,0);
-		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_13,0);
-	}
-	else
-	{
-		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12,1);
-		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_13,1);
-	}
-		
+void EXTI0_IRQHandler(void)
+{
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
 }
 
-void EXTI1_IRQHandler(void) 
-{ 
-	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_1);
-	auto_mode ^= 1;
+void EXTI1_IRQHandler(void)
+{
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_1);
 }
 
-void EXTI2_IRQHandler(void) 
-{ 
-	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_2); 
-	if(auto_mode == 0 && fan_power) Fan_SetLevel(1);
+void EXTI2_IRQHandler(void)
+{
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_2);
 }
 
-void EXTI3_IRQHandler(void) 
-{ 
-	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
-	if(auto_mode == 0 && fan_power) Fan_SetLevel(2);
+void EXTI3_IRQHandler(void)
+{
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
 }
 
-void EXTI4_IRQHandler(void) 
-{ 
-	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_4); 
-	if(auto_mode == 0 && fan_power) Fan_SetLevel(3);
+void EXTI4_IRQHandler(void)
+{
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_4);
 }
 
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+    static uint32_t last_tick = 0;
+    if (HAL_GetTick() - last_tick < 150) return; 
+    last_tick = HAL_GetTick();
+
+    switch (GPIO_Pin)
+    {
+        case GPIO_PIN_0:   
+            fan_power ^= 1;
+            if (fan_power == 0)
+            {
+                Fan_SetLevel(0);
+                auto_mode = 0;
+            }
+            break;
+
+        case GPIO_PIN_1:   
+            auto_mode ^= 1;
+            break;
+
+        case GPIO_PIN_2:   // Level 1
+            if (auto_mode == 0 && fan_power)
+                Fan_SetLevel(1);
+            break;
+
+        case GPIO_PIN_3:   // Level 2
+            if (auto_mode == 0 && fan_power)
+                Fan_SetLevel(2);
+            break;
+
+        case GPIO_PIN_4:   // Level 3
+            if (auto_mode == 0 && fan_power)
+                Fan_SetLevel(3);
+            break;
+    }
+}
 
 int main(void)
 {
@@ -197,6 +207,9 @@ int main(void)
 	
 	Fan_SetLevel(0);
 	
+	HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12,1);
+	HAL_GPIO_WritePin(GPIOB,GPIO_PIN_13,0);
+	
 	Lcd_xoa_manhinh();
 	Lcd_Ghi_Lenh(0x84);
 	sprintf(M,"Wait.....");
@@ -208,39 +221,41 @@ int main(void)
   
   while (1)
 	{
-		uint32_t now = HAL_GetTick();
-		if(now - last_update >= 1000)
-		{
-			last_update = now;
-			if(fan_power != fan_power_old || auto_mode != auto_mode_old || fan_level != fan_level_old)
+		/*        ===== Task 1: DHT(1 giây) ===== */
+    static uint32_t t_dht = 0;
+    if (HAL_GetTick() - t_dht >= 1000)
+    {
+			t_dht = HAL_GetTick();
+
+			HAL_DHT11_ReadData(&dht);
+			temperature = dht.Temperature;
+
+			if (auto_mode && fan_power)
 			{
-				LCD_Update();
-				LED_Update();
-				fan_power_old = fan_power;
-				auto_mode_old = auto_mode;
-				fan_level_old = fan_level;
+				if (temperature < 30)
+						Fan_SetLevel(1);
+				else if (temperature < 36)
+						Fan_SetLevel(2);
+				else
+						Fan_SetLevel(3);
 			}
-		}
-				
+    }
+
+    /* ===== Task 2: LCD + LED (400 ms) ===== */
+    static uint32_t t_ui = 0;
+    if (HAL_GetTick() - t_ui >= 400)
+    {
+			t_ui = HAL_GetTick();
+
+			LCD_Update();
+			LED_Update();
+    }
+		
+		/* ===== Task 3: BLE ===== */		
     if(HAL_UART_Receive(&huart1, buffer_rx, 1, 100) == HAL_OK)
     {
 			char cmd = buffer_rx[0];
 			HM10_Process(cmd);
-    }
-
-    static uint32_t t = 0;
-    if(HAL_GetTick() - t >= 1000)
-    {
-			t = HAL_GetTick();
-			HAL_DHT11_ReadData(&dht);   
-			temperature = dht.Temperature;
-			if(auto_mode && fan_power)
-			{
-				if(temperature < 30) Fan_SetLevel(1);
-				else if(temperature < 36) Fan_SetLevel(2);
-				else Fan_SetLevel(3);
-			}
-			LCD_Update();
     }
 		
 	}
@@ -256,38 +271,38 @@ void SystemClock_Config(void)
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
-  /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
+  /* 1. Kh?i t?o HSI + PLL */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI_DIV2; // 8MHz / 2 = 4MHz
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL16;             // 4MHz × 16 = 64MHz
+
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
   }
 
-  /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  /* 2. Ch?n clock h? th?ng */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK
+                              |RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1
+                              |RCC_CLOCKTYPE_PCLK2;
+
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;   // HCLK = 64 MHz
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;    // APB1 = 32 MHz (=36MHz)
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;    // APB2 = 64 MHz
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
   {
     Error_Handler();
   }
 
-  /** Enables the Clock Security System
-  */
-  HAL_RCC_EnableCSS();
+  /* 3. KHÔNG b?t CSS khi dùng HSI */
+  // HAL_RCC_EnableCSS();  // <-- b?
 }
 
 /**
