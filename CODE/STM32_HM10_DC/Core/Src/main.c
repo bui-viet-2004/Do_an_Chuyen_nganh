@@ -148,7 +148,7 @@ void EXTI4_IRQHandler(void)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
     static uint32_t last_tick = 0;
-    if (HAL_GetTick() - last_tick < 150) return; 
+    if (HAL_GetTick() - last_tick < 200) return; 
     last_tick = HAL_GetTick();
 
     switch (GPIO_Pin)
@@ -162,8 +162,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
             }
             break;
 
-        case GPIO_PIN_1:   
-            auto_mode ^= 1;
+        case GPIO_PIN_1:
+						if(fan_power)
+							auto_mode ^= 1;
             break;
 
         case GPIO_PIN_2:   // Level 1
