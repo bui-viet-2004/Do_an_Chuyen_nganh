@@ -1,2 +1,2 @@
 # Do_an_Chuyen_nganh
-Điều khiển độc cơ bằng BLE
+Điều khiển độc cơ bằng BLE (Mạch thủ công)
